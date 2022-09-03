@@ -1,0 +1,19 @@
+2.1
+1.Vilken/vilka är gästmaskinerna?
+
+Gästmaskiner är separata entiteter som befinner sig inuti ett redan existerande operativsystem eller program. De tar del av värdsmaskinens resurser för att kunna köra.
+
+2.Vilken/vilka är värdmaskinerna?
+
+Värdmaskiner tillhandahåller de fysiska resurser såsom beräkningskraft från processorer, minne, diskutrymme och nätverksåtkomst. Värdmaskinen måste åtminstone ha så mycket resurser som gästmaskinernas minsta behov för att gästmaskinerna ska kunna köra och värdsmaskinen inte kraschar.
+
+
+5.2
+5. Kopiera filen /etc/network/interfaces från VM:en till er hemkatalog
+
+Inuti ssh instans från thinlinc liu till thinlinc qemu:
+scp /etc/network/interfaces andpl509@ssh.edu.liu.se:~
+
+6. Kopiera mappen /etc/default och allt dess innehåll från VM:en till er hemkatalog
+
+scp -r /etc/default andpl509@ssh.edu.liu.se:~

@@ -1,0 +1,97 @@
+LXB
+1.3
+Vilka är de 9 avsnitten?
+
+1   Executable programs or shell commands
+2   System calls (functions provided by the kernel)
+3   Library calls (functions within program libraries)
+4   Special files (usually found in /dev)
+5   File formats and conventions, e.g. /etc/passwd
+6   Games
+7   Miscellaneous (including  macro  packages  and  conventions),  e.g.
+    man(7), groff(7), man-pages(7)
+8   System administration commands (usually only for root)
+9   Kernel routines [Non standard]
+
+Källa: man man
+
+
+Vilket avsnitt dokumenterar kommandoradsverktyg så som cat eller ls?
+
+Avsnitt 1 då efter att man skrivit man cat i terminalen så står det cat(1) högst upp till vänster på man-sidan. 1:an refererar till att cat är del av första avsnittet i man. 
+
+
+1.4
+
+journalctl | tail -n5
+
+De fem sista raderna:
+aug 30 14:08:33 enhacker-ssd audit[8096]: AVC apparmor="DENIED" operation="ptrace" profile="snap.discord.discord" pid=8096 comm="Utils" requested_mask="read" denied_mask="read" peer="unconfined"
+aug 30 14:08:33 enhacker-ssd audit[8096]: AVC apparmor="DENIED" operation="ptrace" profile="snap.discord.discord" pid=8096 comm="Utils" requested_mask="read" denied_mask="read" peer="/usr/bin/man"
+aug 30 14:08:33 enhacker-ssd audit[8096]: AVC apparmor="DENIED" operation="ptrace" profile="snap.discord.discord" pid=8096 comm="Utils" requested_mask="read" denied_mask="read" peer="/usr/bin/man"
+aug 30 14:08:33 enhacker-ssd audit[8096]: AVC apparmor="DENIED" operation="ptrace" profile="snap.discord.discord" pid=8096 comm="Utils" requested_mask="read" denied_mask="read" peer="/usr/bin/man"
+aug 30 14:08:33 enhacker-ssd audit[8096]: AVC apparmor="DENIED" operation="ptrace" profile="snap.discord.discord" pid=8096 comm="Utils" requested_mask="read" denied_mask="read" peer="/usr/bin/man"
+
+
+1.7
+Hur byter man ägare på en fil?
+
+Med kommandot chown. Användning: chown ny_användare fil
+Användning på hel katalog inkl filer: chmod -R ny_användare katalog
+
+
+Hur gör man en fil körbar enbart för dess grupp?
+
+chmod g+x file_name
+Kommandot chmod bestämmer accessrättigheter för filer och/eller kataloger. 
+
+
+1.10
+Hur packar man upp en .tar.gz fil?
+
+tar -xf tarfile_to_unpack.tar.gz 
+
+
+Hur packar man ner en mapp i en .tar.xz fil?
+
+tar -cf tarfile_name.tar.gz dir_to_pack
+
+
+Lägg till /courses/TDDI41 i er PATH, pröva kör start_single.sh utan att ange sökväg.
+
+export PATH=$PATH:/courses/TDDI41
+start_single.sh
+
+
+Gör ändringen permanent
+
+echo "export PATH=$PATH:/courses/TDDI41" >> ~/.bashrc
+. .bashrc
+start_single.sh
+
+
+Sätt LC_ALL till sv_SE.utf-8 och öppna man(1). Vad händer?
+
+export LC_ALL=sv_SE.utf-8
+Dokumentationen för man kommandot blev översatt till svenska.
+
+
+2.1 (frivillig)
+Vi testade att lägga till init=/bin/sh till /proc/cmdline men får write error. Input/output error
+
+2.2
+Hur får man en lista över alla systemd-enheter (units)?
+
+systemctl list-units
+
+
+Hur startar man om sin ssh-server?
+
+/etc/init.d/ssh restart 
+
+
+2.3
+Visa den posten det står att ni loggade in.
+
+Aug 30 16:16:37 debian login[606]: ROOT LOGIN  on '/dev/tty1'
+Aug 30 16:16:42 debian sshd[609]: Accepted password for root from 10.0.2.2 port 57848 ssh2

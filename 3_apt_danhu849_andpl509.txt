@@ -1,0 +1,68 @@
+1.
+Hur installerar man ett paket?
+$ apt install <paket_namn>
+
+Installera en .deb fil:
+$ dpkg -i <.deb file>
+
+Hur avinstallerar man ett paket?
+$ apt remove <paket_namn>
+
+Hur avinstallerar man verkligen ett paket (d.v.s. hur tar man bort paketet och alla dess filer)?
+$ apt purge <paket_namn>
+$ apt --purge autoremove
+
+Hur får man de senaste uppdateringarna till sitt system? (och installerar dem)
+$ apt update && apt upgrade -y
+
+Hur ser man vilka filer som ett paket tillhandahåller?
+Ett installerat paket:
+$ dpkg-query -L <paket_namn>
+
+Vilka filer ett .deb paket kommer installera:
+$ dpkg-deb -c <paket_namn>
+
+Vilka filer ett icke installerat paket innehåller:
+$ apt-file list <paket_namn>
+
+Hur ser man vilket paket som tillhandahåller en fil?
+$ apt-file search <the_file>
+
+Installera paketet cowsay
+$ apt update && apt upgrade -y
+$ apt install cowsay
+
+
+Verifiera att det är installerat, och testkör cowsay
+$ dpkg-query -l cowsay
+$ echo "alias cowsay='/usr/games/cowsay' >> ~/.bashrc"
+$ . ~/.bashrc
+$ export LC_ALL="en_US.UTF-8"
+$ cowsay "What're ya buyin?"
+ ___________________
+< What're ya buyin? >
+ -------------------
+        \   ^__^
+         \  (oo)\_______
+            (__)\       )\/\
+                ||----w |
+                ||     ||
+
+Avinstallera cowsay
+$ apt remove cowsay
+$ apt update && apt upgrade -y
+
+Hur lägger man till ett nytt repo?
+Manuellt:
+Lägger till önskat repo i /etc/apt/sources.list
+$ apt update
+
+Med apt:
+$ add-apt-repository 'repo-info'
+
+Hur tar man bort ett repo?
+Manuellt:
+Ta bort repo-infon från /etc/apt/sources.list eller ta bort .list filen i med den specifika repo-infon från /etc/apt/sources.list.d
+
+Med apt:
+$ add-apt-repository --remove 'repo-info'
