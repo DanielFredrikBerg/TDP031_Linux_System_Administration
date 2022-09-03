@@ -11,7 +11,8 @@ import sys
 import random
 import string
 import re
-from subprocess import run, Popen, PIPE, check_call
+from subprocess import run, Popen, PIPE, check_call, check_output
+
 
 def generate_password(size):
     letters_and_nums = string.ascii_letters + string.digits
@@ -19,15 +20,19 @@ def generate_password(size):
     password = ''.join(password)
     return password
 
-    # what about piping?
+
+# what about piping?
 def generate_username(line):
     if line != '\n':
         line = line.split()
-        username = re.sub( '[^a-zA-Z0-9]', '', line[0]+line[-1] )
+        #username = re.sub( '[^a-zA-Z0-9]', '', line[0]+line[-1] )
+        username = line[0] + line[-1] 
         username += '#' + str(random.randint(1111,9999))
         return username    
 
-#https://stackoverflow.com/questions/4688441/how-can-i-set-a-users-password-in-linux-from-a-python-script
+
+# https://stackoverflow.com/questions/4688441/how-can-i-set-a-users-password-in-linux-from-a-python-script
+# could use chpasswd instead? prolly better
 def user_add(username, password):
     #subprocess.run(['useradd', '-mp', password, username])
     run(['useradd', '-m', username])
@@ -40,17 +45,38 @@ def user_add(username, password):
     #print(stdout)
     #print(stderr)
 
+
 def create_user(line):
     username = generate_username(line)
     password = generate_password(8)
     new_user = user_add( username, password )
     print(f"Username: {username}, Password: {password}")
 
+
+# check the file encoding of the given file with "file -i filename"
+# if the encoding is not utf-8
+# convert the file to utf-8 using iconv
+def handle_encoding(file_name):
+    out = check_output(["file", "-i", file_name]).decode()
+    file_encoding = re.search('charset=(.*)', out).group(1)
+    if (file_encoding != 'utf-8'):
+        print("hello")
+        run(['iconv', '-f', file_encoding, '-t', 'utf-8', file_name, '-o', file_name])
+        print(f"Running iconv on \"{file_name}\", converting \
+from {file_encoding} to utf-8.")
+    out = check_output(["file", "-i", file_name]).decode()
+    print(out)
+
+
 def main():
-    with open(sys.argv[1], 'r') as f:
+    handle_encoding(sys.argv[1])
+    with open(sys.argv[1], 'r', encoding='utf-8') as f:
         lines = f.readlines()
         for line in lines:
+            if(line == '\n'):
+                continue
             create_user(line)
+
 
 main()
 
