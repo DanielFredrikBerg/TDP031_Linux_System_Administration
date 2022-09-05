@@ -1,4 +1,4 @@
-#shebang?
+#!/usr/bin/python3
 # En shebang börjar med ett hashtecken följt av ett uttropstecken, en absolut filväg till ett körbart program (vanligtvis en interpretator) som kommer exekvera filen. Det går också att lägga till parametrar likt exemplet nedan:
 # #!/filväg/till/program param1 param2
 
@@ -21,7 +21,7 @@ def generate_password(size):
     return password
 
 
-# what about piping?
+    # what about piping?
 def generate_username(line):
     if line != '\n':
         line = line.split()
@@ -31,8 +31,6 @@ def generate_username(line):
         return username    
 
 
-# https://stackoverflow.com/questions/4688441/how-can-i-set-a-users-password-in-linux-from-a-python-script
-# could use chpasswd instead? prolly better
 def user_add(username, password):
     #subprocess.run(['useradd', '-mp', password, username])
     run(['useradd', '-m', username])
@@ -56,21 +54,20 @@ def create_user(line):
 # check the file encoding of the given file with "file -i filename"
 # if the encoding is not utf-8
 # convert the file to utf-8 using iconv
+# incov -from_encoding -to_encoding filename -output same_filename
+# (override)
 def handle_encoding(file_name):
     out = check_output(["file", "-i", file_name]).decode()
     file_encoding = re.search('charset=(.*)', out).group(1)
     if (file_encoding != 'utf-8'):
-        print("hello")
         run(['iconv', '-f', file_encoding, '-t', 'utf-8', file_name, '-o', file_name])
         print(f"Running iconv on \"{file_name}\", converting \
 from {file_encoding} to utf-8.")
-    out = check_output(["file", "-i", file_name]).decode()
-    print(out)
 
 
 def main():
     handle_encoding(sys.argv[1])
-    with open(sys.argv[1], 'r', encoding='utf-8') as f:
+    with open(sys.argv[1], 'r') as f:
         lines = f.readlines()
         for line in lines:
             if(line == '\n'):
