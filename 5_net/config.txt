@@ -1,0 +1,119 @@
+Vi lÃgger till fÃljande info i det specificerade filerna nedan. 
+Filernas path Ãr givna.
+
+
+ROUTER CONFIG
+/etc/hosts
+
+127.0.0.1       localhost
+127.0.1.1       gw.local        gw
+10.0.0.1        client1.mach    client1
+10.0.0.2        client2.mach    client2
+10.0.0.3        server.mach     server
+
+
+/etc/hostname
+gw
+
+
+/etc/network/interfaces
+# ip config
+auto ens4
+iface ens4 inet static
+        address 10.0.0.69
+        netmask 255.255.255.0
+
+
+uncomment line in sysctl.conf
+/etc/sysctl.conf
+net.ipv4.ip_forward=1
+
+
+apply changed
+$ sysctl -p /etc/sysctl.conf 
+
+
+systemd allow ipforward
+/etc/systemd/network/ens4.network
+[Match] 
+Name=ens4 
+[Network] 
+IPForward=ipv4 
+
+
+apt install iptables-persistent 
+iptables -t nat -A POSTROUTING -o ens3 -j MASQUERADE 
+iptables-save > /etc/iptables/rules.v4 
+
+
+__________________________________________
+SERVER CONFIG
+/etc/hosts
+
+127.0.0.1        localhost
+127.0.1.1       server.local    server
+10.0.0.1        client1.mach    client1
+10.0.0.2        client2.mach    client2
+10.0.0.69       gw.router       gw
+
+
+/etc/hostname
+server
+
+
+/etc/network/interfaces
+# ip config
+iface ens3 inet static
+        address 10.0.0.3
+        netmask 255.255.255.0
+        gateway 10.0.0.69
+
+
+_________________________________________
+CLIENT1 CONFIG
+/etc/hosts
+
+127.0.0.1       localhost
+127.0.1.1       client1.local   client1
+10.0.0.2        client2.mach    client2
+10.0.0.3        server.mach     server
+10.0.0.69       gw.router       gw
+
+
+/etc/hostname
+client1
+
+
+/etc/network/interfaces
+# ip config
+iface ens3 inet static
+        address 10.0.0.1
+        netmask 255.255.255.0
+        gateway 10.0.0.69
+
+
+__________________________________________
+CLIENT2 CONFIG
+/etc/hosts
+
+127.0.0.1       localhost
+127.0.1.1       client2.local   client2
+10.0.0.1        client1.mach    client1
+10.0.0.3        server.mach     server
+10.0.0.69       gw.router       gw
+
+
+/etc/hostname
+client2
+
+
+/etc/network/interfaces
+# ip config
+iface ens3 inet static
+        address 10.0.0.2
+        netmask 255.255.255.0
+        gateway 10.0.0.69
+___________________________________________
+
+
+
