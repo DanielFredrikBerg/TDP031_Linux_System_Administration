@@ -1,0 +1,83 @@
+danhu849 & andpl509
+2.2
+Vad är kommandot för att skicka 5 packet till localhost?
+$ ping localhost -c 5
+
+Vad är kommandot för att skicka 3 packet till localhost med 2 sekunders mellanrum mellan varje packet?
+$ ping localhost -c 3 -i 5
+
+
+2.3
+Vad är kommandot för att lista adresserna för alla nätverksinterfacen i datorn?
+ip addr
+
+Vad är kommandot för att ta nätverksinterfacet ens4 online?
+ip link set ens4 up
+
+Vad är kommandot för att ge nätverksinterfacet ens4 ip-adressen 192.168.1.2 med en 24-bitars nätmask?
+ip addr add 192.168.1.2/24 dev ens4
+
+Vad är kommandot för att visa routing-tabellen?
+ip route
+
+
+3.1
+Se till att alla era maskiner har ip-adresser, nätmask, samt gateway; samt verifiera att server, client-1 och client-2 når din router (börja med din router). Din konfiguration ska klara av en omstart av maskinerna. (För er router är det enbart kortet ens4 som behöver konfigureras ens3 får en ip-adress (samt default route, m.m.) av en extern dhcp-server)
+
+1. Bytte hostname i /etc/hostname till client1, client2, gw, server på respektive maskin.
+client1
+client2
+server
+gw
+
+3. Därefter skapades ip till respektive nätverksinterface.
+10.0.0.1   för ens3 i client1
+10.0.0.2   för ens3 i client2
+10.0.0.3   för ens3 i server
+10.0.0.69  för ens4 i routern (gw)
+
+Följande lades till sist i filen /etc/network/interfaces för de olika maskinerna.
+gw (router):
+# ip config
+auto ens4
+iface ens4 inet static
+      address 10.0.0.69
+      netmask 255.255.255.240
+
+server:
+# ip config
+iface ens3 inet static
+      address 10.0.0.3
+      netmask 255.255.255.240
+      gateway 10.0.0.69
+
+client1:
+# ip config
+iface ens3 inet static
+      address 10.0.0.1
+      netmask 255.255.255.240
+      gateway 10.0.0.69
+
+client2:
+# ip config
+iface ens3 inet static
+      address 10.0.0.2
+      netmask 255.255.255.240
+      gateway 10.0.0.69
+
+3. La till de andra maskinerna i respektive /etc/hosts som följande, den egna maskinen fick alltid den lokala adressen 127.0.1.1 och 127.0.0.1:
+10.0.0.1   client1.mach	       client1
+10.0.0.2   client2.mach	       client2
+10.0.0.3   server.mach	       server
+10.0.0.69  gw.router	       gw
+
+
+/etc/hostname innehåller värdnamnet för datorn
+* Ändra värdnamnet (hostname) till router, client1, client2 och server till respektive namn sak på respektive maskin genom att ändra i:
+/etc/hostname
+/etc/hosts
+* Kontrollera att ändringen skett mha hostnamectl
+
+
+/etc/hosts innehåller värdens adress, FQDN och värdnamn
+
